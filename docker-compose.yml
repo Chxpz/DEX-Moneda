@@ -1,0 +1,67 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:9.6
+    environment:
+        - POSTGRES_USER=api
+        - POSTGRES_PASSWORD=api
+        - POSTGRES_DB=api
+    ports:
+        - "5432:5432"
+  frontend:
+    image: 0xorg/launch-kit-frontend:latest
+    environment:
+      REACT_APP_RELAYER_URL: 'http://localhost:3000/sra/v3'
+      REACT_APP_RELAYER_WS_URL: 'ws://localhost:3000/sra/v3'
+      REACT_APP_DEFAULT_BASE_PATH: '/erc20'
+      REACT_APP_THEME_NAME: 'DARK_THEME'
+      REACT_APP_NETWORK_ID: 3
+      REACT_APP_CHAIN_ID: 3
+      
+    command: yarn build
+    volumes:
+        - frontend-assets:/app/build
+  backend:
+    image: 0xorg/0x-api:latest
+    depends_on: 
+        - postgres
+        - mesh
+    environment:
+        HTTP_PORT: '3000'
+        ETHEREUM_RPC_URL: ''
+        NETWORK_ID: '3'
+        CHAIN_ID: '3'
+        WHITELIST_ALL_TOKENS: 'true'
+        FEE_RECIPIENT: '0x5B4D5eaa34eE8D2925D6f92a65af74De76576B49'
+        MAKER_FEE_UNIT_AMOUNT: '0'
+        TAKER_FEE_UNIT_AMOUNT: '0'
+        MESH_WEBSOCKET_URI: 'ws://mesh:60557'
+        POSTGRES_URI: 'postgresql://api:api@postgres/api'
+    ports:
+      - '3000:3000'
+  mesh:
+    image: 0xorg/mesh:9.0.1
+    restart: always
+    environment:
+        ETHEREUM_RPC_URL: ''
+        ETHEREUM_CHAIN_ID: '3'
+        USE_BOOTSTRAP_LIST: 'true'
+        VERBOSITY: 3
+        PRIVATE_KEY_PATH: ''
+        WS_RPC_ADDR: '0.0.0.0:60557'
+        # You can decrease the BLOCK_POLLING_INTERVAL for test networks to
+        # improve performance. See https://0x-org.gitbook.io/mesh/ for more
+        # Documentation about Mesh and its environment variables.
+        BLOCK_POLLING_INTERVAL: '5s'
+    ports:
+        - '60557:60557'
+        - '60558:60558'
+        - '60559:60559'
+  nginx:
+    image: nginx
+    ports:
+        - '3001:80'
+    volumes:
+        - frontend-assets:/usr/share/nginx/html
+volumes:
+    frontend-assets:
