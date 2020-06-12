@@ -28,7 +28,7 @@ services:
         - mesh
     environment:
         HTTP_PORT: '3000'
-        ETHEREUM_RPC_URL: ''
+        ETHEREUM_RPC_URL: ' '
         NETWORK_ID: '3'
         CHAIN_ID: '3'
         WHITELIST_ALL_TOKENS: 'true'
