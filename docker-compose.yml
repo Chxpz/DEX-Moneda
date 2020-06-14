@@ -15,8 +15,8 @@ services:
       REACT_APP_RELAYER_WS_URL: 'ws://localhost:3000/sra/v3'
       REACT_APP_DEFAULT_BASE_PATH: '/erc20'
       REACT_APP_THEME_NAME: 'DARK_THEME'
-      REACT_APP_NETWORK_ID: 3
-      REACT_APP_CHAIN_ID: 3
+      REACT_APP_NETWORK_ID: 1
+      REACT_APP_CHAIN_ID: 1
       
     command: yarn build
     volumes:
@@ -29,10 +29,10 @@ services:
     environment:
         HTTP_PORT: '3000'
         ETHEREUM_RPC_URL: ''
-        NETWORK_ID: '3'
-        CHAIN_ID: '3'
+        NETWORK_ID: '1'
+        CHAIN_ID: '1'
         WHITELIST_ALL_TOKENS: 'true'
-        FEE_RECIPIENT: '0x5B4D5eaa34eE8D2925D6f92a65af74De76576B49'
+        FEE_RECIPIENT: '0x87A95AbacEBCD9899e9DC47932B6df2Ab218f134'
         MAKER_FEE_UNIT_AMOUNT: '0'
         TAKER_FEE_UNIT_AMOUNT: '0'
         MESH_WEBSOCKET_URI: 'ws://mesh:60557'
@@ -43,8 +43,8 @@ services:
     image: 0xorg/mesh:9.0.1
     restart: always
     environment:
-        ETHEREUM_RPC_URL: ''
-        ETHEREUM_CHAIN_ID: '3'
+        ETHEREUM_RPC_URL: 'https://mainnet.infura.io/v3/4339986b4c4f4e41bc53c69019845183'
+        ETHEREUM_CHAIN_ID: '1'
         USE_BOOTSTRAP_LIST: 'true'
         VERBOSITY: 3
         PRIVATE_KEY_PATH: ''
